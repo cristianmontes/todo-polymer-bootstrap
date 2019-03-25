@@ -1,0 +1,7 @@
+{
+  "name": "to-do",
+  "short_name": "to-do",
+  "description": "aplicacion de lista de tareas",
+  "start_url": "/",
+  "display": "standalone"
+}
