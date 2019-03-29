@@ -12,10 +12,10 @@ class TodoHeader extends PolymerElement {
         :host {
           display: block;          
         }
-        .modal{
-          display: block;
-        }
       </style>
+
+      <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+
       
       <nav class="navbar navbar-dark bg-primary">
         <a class="navbar-brand" href="#">Tablero Kanban</a>
@@ -23,45 +23,25 @@ class TodoHeader extends PolymerElement {
           <button class="btn btn-outline-light my-2 my-sm-0" type="button"
           on-click="agregarItem">+</button>
 
-          <button type="button" class="btn btn-primary" data-toggle="modal" 
-              data-target="#exampleModalCenter">
-              Launch demo modal
-          </button>
+          <button class="btn btn-outline-light my-2 my-sm-0" type="button"
+            onclick="abre();">+</button>
         </form>
       </nav>
-
-
-      <div class="modal" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalCenterTitle">Modal title</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-              ...
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-              <button type="button" class="btn btn-primary">Save changes</button>
-            </div>
-          </div>
-        </div>
-      </div>
     `;
   }
 
   agregarItem(event) {
-    var element = document.getElementById("exampleModalCenter");
-    element.classList.add("modal2");
-    //$('exampleModalCenter').modal('show');
     /*
-    console.log(this.shadowRoot.querySelector("#exampleModalCenter"));
-    this.shadowRoot.querySelector("#exampleModalCenter").modal('show');
-    document.getElementById('exampleModalCenter').modal('show');*/
+    var back = this.shadowRoot.getElementById('back')
+    back.classList.add('modal-backdrop', 'fade', 'show');
+
+    var back = this.shadowRoot.getElementById('exampleModal')
+    back.classList.add('show');
+    back.style.display = 'block';
+
     this.dispatchEvent(new CustomEvent('agregarItem', {bubbles: true, composed: true}));
+    */
+    this.dispatchEvent(new CustomEvent('abreVentana', {bubbles: true, composed: true}));
   }
 }
 
