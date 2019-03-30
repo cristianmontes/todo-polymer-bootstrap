@@ -19,7 +19,7 @@ class TodoItem extends PolymerElement {
           hidden$="{{hidden}}"
           item=[[item]]>[[btnAccion]]</a>
         <a href="#" class="btn btn-outline-primary" 
-          on-click="removerItem"
+          on-click="verDetalle"
           item=[[item]]>Ver Detalle</a>
       </div>
     `;
@@ -43,6 +43,11 @@ class TodoItem extends PolymerElement {
 
   removerItem(event) {
     this.dispatchEvent(new CustomEvent('actualizarItem', {bubbles: true, composed: true,
+      detail: {item: event.target.item}}));
+  }
+
+  verDetalle(event) {
+    this.dispatchEvent(new CustomEvent('verDetalle', {bubbles: true, composed: true,
       detail: {item: event.target.item}}));
   }
 

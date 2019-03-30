@@ -9,8 +9,6 @@ class TodoTaskDetail extends PolymerElement {
     return html`
       <style include="granite-bootstrap">
       </style>
-      <a href="#" class="btn btn-outline-primary" 
-          hidden$="{{oculto}}">asdfasdfadsf</a>
       <div class="modal fade" id="taskdetail" tabindex="-1" role="dialog" 
         aria-labelledby="exampleModalLabel" aria-modal="true">
         <div class="modal-dialog" role="document">
@@ -22,20 +20,21 @@ class TodoTaskDetail extends PolymerElement {
               </button>
             </div>
             <div class="modal-body">
-              <form>
+              
                 <div class="form-group">
                   <label for="recipient-name" class="col-form-label">Título:</label>
-                  <input type="text" class="form-control" id="recipient-name">
+                  <input type="text" class="form-control" id="recipient-name" value={{titulo::input}}
+                   disabled="{{!editable}}">
                 </div>
                 <div class="form-group">
                   <label for="message-text" class="col-form-label">Descripción:</label>
-                  <textarea class="form-control" id="message-text"></textarea>
+                  <textarea class="form-control" id="message-text" value={{descripcion::input}}
+                  disabled="{{!editable}}"></textarea>
                 </div>
-              </form>
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" on-click="cerrarVentana">Cancelar</button>
-              <button type="button" class="btn btn-primary">Aceptar</button>
+              <button type="button" class="btn btn-primary" hidden$="{{!editable}}" on-click="agregarItem">Aceptar</button>
             </div>
           </div>
         </div>
@@ -49,15 +48,23 @@ class TodoTaskDetail extends PolymerElement {
         type: Boolean,
         value: true,
         observer: 'evaluarEstadoVentana'
+      },
+      titulo: {
+        type: String
+      },
+      descripcion: {
+        type: String
+      },
+      editable: {
+        type: Boolean
       }
     };
   }
 
   evaluarEstadoVentana(oculto){
-    console.log("cambio " + oculto);
     if(oculto){
       var back = this.shadowRoot.getElementById('back')
-      back.classList.remove('modal-backdrop', 'fade', 'show');
+      back.classList.remove('modal-backdrop', 'show');
 
       var back = this.shadowRoot.getElementById('taskdetail')
       back.classList.remove('show');
@@ -65,7 +72,7 @@ class TodoTaskDetail extends PolymerElement {
 
     }else{
       var back = this.shadowRoot.getElementById('back')
-      back.classList.add('modal-backdrop', 'fade', 'show');
+      back.classList.add('modal-backdrop', 'show');
 
       var back = this.shadowRoot.getElementById('taskdetail')
       back.classList.add('show');
@@ -74,7 +81,20 @@ class TodoTaskDetail extends PolymerElement {
   }
 
   cerrarVentana(){
-    this.oculto = true;
+    this.dispatchEvent(new CustomEvent('cerrarVentana', {bubbles: true, composed: true}));
+    this.titulo = "";
+    this.descripcion = "";
+  }
+
+  agregarItem(){
+    if(this.titulo.length > 0 && this.descripcion.length >0){
+      this.dispatchEvent(new CustomEvent('agregarItem', {bubbles: true, composed: true,
+        detail: {titulo: this.titulo, descripcion: this.descripcion}}));
+      this.titulo = "";
+      this.descripcion = "";
+    }else{
+      alert("El título y la descripcion de la tarea son obligatorios");
+    }
   }
 }
 

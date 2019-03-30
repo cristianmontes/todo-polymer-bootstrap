@@ -15,7 +15,9 @@ class TodoApp extends PolymerElement {
       <div>
       <todo-header></todo-header>
       <todo-body tareas=[[tareas]]></todo-body>
-      <todo-taskdetail oculto={{estaCerrado}}></todo-taskdetail>
+      <todo-taskdetail oculto={{estaCerrado}} titulo="{{titulo}}" 
+        descripcion="{{descripcion}}" editable={{esEditable}}>
+      </todo-taskdetail>
       </div>
     `;
   }
@@ -25,11 +27,21 @@ class TodoApp extends PolymerElement {
         type: Boolean,
         value: true
       },
+      esEditable: {
+        type: Boolean,
+        value: true
+      },
       tareas: {
         type: Array,
         value() {
           return []
         }
+      },
+      titulo: {
+        type: String
+      },
+      descripcion: {
+        type: String
       }
     };
   }
@@ -37,23 +49,44 @@ class TodoApp extends PolymerElement {
   ready() {
     super.ready();
     this.addEventListener('agregarItem', this.agregarItem);
-    this.addEventListener('abreVentana', this.abreVentana);
+    this.addEventListener('abrirVentana', this.abrirVentana);
+    this.addEventListener('cerrarVentana', this.cerrarVentana);
+    this.addEventListener('verDetalle', this.verDetalle);
   }
 
-  abreVentana(event){
-    console.log("abriendo la ventana");
-    //this.estaCerrado = false;
-    this.estaCerrado = !this.estaCerrado;
+  abrirVentana(event){
+    this.titulo = "";
+    this.descripcion = "";
+    this.estaCerrado = false;
+    this.esEditable = true;
+  }
+
+  cerrarVentana(event){
+    this.titulo = "";
+    this.descripcion = "";
+    this.estaCerrado = true;
+    this.esEditable = false;
   }
 
   agregarItem(event){
     var iditem = this.tareas.length + 1;
-    var itemsel = {titulo: 'Revisar Calendario' + iditem, 
-    descripcion: 'Tenemos que revisar el calendario todos los dias ' +iditem ,
-    estado: 'pendiente',
-    iditem: iditem};
+    var itemsel = {
+        titulo: event.detail.titulo, 
+        descripcion: event.detail.descripcion,
+        estado: 'pendiente',
+        iditem: iditem
+      };
 
     this.push('tareas', itemsel);
+    this.estaCerrado = true;
+  }
+
+  verDetalle(event){
+    console.log(event.detail.item);
+    this.titulo = event.detail.item.titulo;
+    this.descripcion = event.detail.item.descripcion;
+    this.estaCerrado = false;
+    this.esEditable = false;
   }
 }
 
